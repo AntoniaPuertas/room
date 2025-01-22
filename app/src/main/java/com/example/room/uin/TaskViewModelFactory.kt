@@ -4,7 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.room.repository.TaskRepository
 
-
+/*
+Es una clase Factory que crea ViewModels
+Implementa la interfaz ViewModelProvider.Factory
+Recibe el repositorio como dependencia en el constructor
+ */
 class TaskViewModelFactory(private val repository: TaskRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TaskViewModel::class.java)) {
