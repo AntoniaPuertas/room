@@ -38,8 +38,14 @@ also guarda la instancia en INSTANCE
                     context.applicationContext,
                     TaskDatabase::class.java,
                     "task_database"
-                ).build().also { INSTANCE = it }
+                )/*
+                * solo para desarrollo, destruye la base existente y crea otra nueva
+                * solo funciona cuando cambia algo en la base de datos, la estructura, versión o nombre
+                */
+                    .fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
             }
         }
-    }
+
 }
+    }

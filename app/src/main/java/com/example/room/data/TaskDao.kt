@@ -24,6 +24,9 @@ interface TaskDao {
 
     @Delete
     suspend fun deleteTask(task: Task)
+
+    @Insert
+    suspend fun insertAll(tasks: List<Task>)
 }
 /*
 // Buscar por tipo

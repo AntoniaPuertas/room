@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
+
+    init {
+        // Al inicializar el ViewModel, insertamos datos de prueba
+        insertSampleData()
+    }
+
     val allTasks = repository.allTasks.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -30,6 +36,24 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.deleteTask(task)
+        }
+    }
+
+    fun insertSampleData() {
+        viewModelScope.launch {
+            // Lista de tareas de ejemplo
+            val sampleTasks = listOf(
+                Task(description = "Hacer la compra", type = "Personal"),
+                Task(description = "Estudiar Kotlin", type = "Trabajo"),
+                Task(description = "Ir al gimnasio", type = "Salud"),
+                Task(description = "Llamar al médico", type = "Salud"),
+                Task(description = "Reunión de equipo", type = "Trabajo")
+            )
+
+            // Insertar cada tarea
+            sampleTasks.forEach { task ->
+                repository.insertTask(task)
+            }
         }
     }
 }
