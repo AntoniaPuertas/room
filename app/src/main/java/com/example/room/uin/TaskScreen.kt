@@ -37,7 +37,39 @@ import com.example.room.data.Task
 
 @Composable
 fun TaskScreen(viewModel: TaskViewModel) {
+    /*
+    viewModel.allTasks devuelve un StateFlow del viewModel
+    collectAsState() Es una función de Jetpack Compose:
+        - Convierte el StateFlow en un State<List<Task>>
+        - State es un tipo especial de Compose que puede provocar recomposiciones cuando su valor cambia
+        - Automáticamente se subscribe y desubscribe del Flow siguiendo el ciclo de vida del Compose
+    by - Es el operador de delegación de propiedades en Kotlin que permite acceder directamente al valor contenido en el State
+    en vez de escribir tasks.value se puede usar tasks
+    si utilizara = habría que escribir tasks.value
+     */
+    /*
+    Cuando los datos en Room cambien:
+        - El StateFlow emitirá la nueva lista
+        - collectAsState() actualizará el State
+        - Compose detectará el cambio
+        - La UI se recompondrá automáticamente
+     */
     val tasks by viewModel.allTasks.collectAsState()
+    /*
+    remember
+     es una función de Compose que recuerda un valor entre recomposiciones
+    sin remember, el valor se reiniciaría cada vez que el composable se recomponga
+    mantiene el estado mientras el composable esté en la composición
+     */
+    /*
+    mutableStateOf("")
+    Crea un estado mutable en Compose con un valor inicial ""
+    Es observable-Compose detectará cambios en este valor
+     */
+    /*
+    var
+    Se usa para poder modificar el valor (si fuera val sería de solo lectura)
+     */
     var description by remember { mutableStateOf("") }
     var type by remember { mutableStateOf("") }
 
@@ -46,8 +78,17 @@ fun TaskScreen(viewModel: TaskViewModel) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        /*
+        Campo de texto con borde
+        Es un componente de Material Design
+        Tiene un borde visible que lo rodea
+        La etiqueta "Description" flota arriba cuando el campo tiene contenido
+         */
         OutlinedTextField(
+            //valor inicial del campo de texto
             value = description,
+            //se llama cada vez que el usuario escribe algo
+            //it representa el nuevo texto introducio
             onValueChange = { description = it },
             label = { Text("Descripción") },
             modifier = Modifier.fillMaxWidth()
